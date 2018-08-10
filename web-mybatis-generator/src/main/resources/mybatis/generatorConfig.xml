@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	
+	<!-- 加载配置文件 -->
+    <properties resource="config/database.properties" />
+
+    <context id="MyOracle" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <!-- UTF-8编码-->
+        <property name="javaFileEncoding" value="UTF-8"/>
+		
+		<!-- 格式化java代码-->
+		<property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+		<!-- 格式化XML代码-->
+		<property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+        
+        <!-- beginningDelimiter和endingDelimiter：指明数据库用于标记数据库对象名的符号 -->
+        <property name="beginningDelimiter" value="`" />
+        <property name="endingDelimiter" value="`" />
+
+		<!-- 生成的Model，将实现 Serializable-->    
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+
+        <!-- 通用Mapper配置 -->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper" />
+        </plugin>
+		
+		<!-- 自动生成的注释 -->
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		
+		<!-- 数据库连接 -->
+        <jdbcConnection driverClass="${db.driver}" connectionURL="${db.url}" userId="${db.username}" password="${db.password}">
+        </jdbcConnection>
+        
+		<!--指定生成的类型为java类型，避免数据库中number等类型字段 -->
+		<javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
+			<property name="forceBigDecimals" value="false"/>
+		</javaTypeResolver>
+
+		<!-- 生成的实体的存放包路径 -->
+        <javaModelGenerator targetProject="${javaProject}" targetPackage="${targetBasePackage}.model">
+			<property name="enableSubPackages" value="true"/>
+			<property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+		
+		<!-- 生成的*Mapper.xml文件存放路径,根路径设置与Java一致，方便复制 -->
+        <sqlMapGenerator targetProject="${javaProject}" targetPackage="${targetBasePackage}.mapper">
+			<property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+		
+		<!-- 生成的*Mapper.java存放路径 -->
+		<javaClientGenerator targetProject="${javaProject}" targetPackage="${targetBasePackage}.dao" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		
+		<!-- 要生成Mapper的数据库表 -->
+		<!--  案例
+        <table tableName="${YOUR_TABLE}"
+        	enableInsert="true"
+        	enableSelectByPrimaryKey="true"
+        	enableUpdateByPrimaryKey="true"
+        	enableDeleteByPrimaryKey="true"
+        	enableSelectByExample="false"
+        	enableCountByExample="false"
+        	enableUpdateByExample="false"
+        	enableDeleteByExample="false">
+            <generatedKey column="ID" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre" />
+        </table>
+        -->
+    </context>
+    
+</generatorConfiguration>
